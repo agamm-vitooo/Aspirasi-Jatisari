@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import index from '../pages/auth/index.vue';
 import Dashboard from '../pages/Dashboard.vue';
 import Login from '../pages/auth/LoginPages.vue';
+import Register from '../pages/auth/RegisterPages.vue';
+import About from '../pages/AboutPages.vue'; // Import the AboutPage component
 
 const routes = [
-    { path: '/', name: 'index', component: index },
-    { path: '/login', name: 'Login', component: Login },
-    { path: '/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } }
+    { path: '/login', name: 'Login', component: Login, meta: { hideNavbar: true } },
+    { path: '/register', name: 'Register', component: Register, meta: { hideNavbar: true } },
+    { path: '/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } },
+    { path: '/about', name: 'About', component: About } // Add AboutPage route
 ];
 
 const router = createRouter({
@@ -14,15 +16,15 @@ const router = createRouter({
     routes
 });
 
-// Middleware untuk cek autentikasi
+// Middleware for authentication check
 router.beforeEach((to, from, next) => {
-    const isLoggedIn = !!localStorage.getItem('token'); // Token harus ada di localStorage
-    console.log('Auth Check:', isLoggedIn, 'Target Route:', to.path); // Log untuk cek token dan rute
+    const isLoggedIn = !!localStorage.getItem('token');
+    console.log('Auth Check:', isLoggedIn, 'Target Route:', to.path);
 
     if (to.matched.some(record => record.meta.requiresAuth) && !isLoggedIn) {
-        next('/login'); // Jika belum login, arahkan ke halaman login
+        next('/login');
     } else {
-        next(); // Jika sudah login atau rute tidak membutuhkan autentikasi, lanjutkan
+        next();
     }
 });
 

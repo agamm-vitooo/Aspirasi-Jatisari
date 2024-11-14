@@ -1,20 +1,27 @@
-<!-- src/App.vue -->
 <template>
-  <div id="app">
-    <index/>
+  <div id="app" class="flex">
+    <!-- Sidebar will only appear if the route meta doesn't have hideNavbar as true -->
+    <Sidebar v-if="!$route.meta.hideNavbar" />
+
+    <!-- Main Content Area -->
+    <div class="flex-1">
+      <!-- Show Navbar if hideNavbar meta property is not true -->
+      <Navbar v-if="!$route.meta.hideNavbar" />
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
-import index from './pages/auth/index.vue';
+import Navbar from './layout/Navbar/Navbar.vue';
+import Sidebar from './layout/Sidebar.vue';
 
 export default {
-  components: {
-    index
-  }
+  name: "App",
+  components: { Navbar, Sidebar }
 };
 </script>
 
 <style>
-/* Tambahkan gaya global jika diperlukan */
+/* Add any global styles here if needed */
 </style>
