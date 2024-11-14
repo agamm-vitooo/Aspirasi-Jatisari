@@ -23,5 +23,8 @@ export default {
 </script>
 
 <style>
-/* Add any global styles here if needed */
+/* Global styling */
+#app {
+  min-height: 100vh;
+}
 </style>
