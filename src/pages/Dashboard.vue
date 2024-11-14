@@ -29,7 +29,7 @@
       </div>
 
       <!-- Main Content -->
-      <div class="flex flex-col justify-center h-full max-w-4xl mx-auto px-6 md:px-8">
+      <div class="flex flex-col justify-center h-full mt-24 md:mt-0 max-w-4xl ml-6 px-6 md:px-8">
         <!-- Small Pre-title -->
         <div class="mb-4 flex items-center">
           <div class="w-12 h-0.5 bg-indigo-500 mr-4"></div>
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Main Title -->
-        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-fade-in">
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-fade-in">
           Selamat Datang di<br/>
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
             Website Aspirasi
@@ -48,7 +48,7 @@
         </h1>
 
         <!-- Description -->
-        <p class="text-lg text-gray-300 mb-8 max-w-2xl animate-fade-in-delay">
+        <p class="text-base sm:text-lg text-gray-300 mb-8 max-w-2xl animate-fade-in-delay">
           Tempat untuk menyampaikan masukan, keluhan, dan aspirasi Anda demi kemajuan desa kita bersama. 
           Suara Anda adalah langkah awal perubahan.
         </p>
@@ -57,7 +57,7 @@
         <div class="flex flex-wrap gap-4 animate-fade-in-delay-2">
           <button 
             @click="createReport"
-            class="relative overflow-hidden group px-8 py-3 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105"
+            class="relative overflow-hidden group px-6 py-2 sm:px-8 sm:py-3 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105"
           >
             <span class="relative z-10 flex items-center">
               <i class="fas fa-edit mr-2"></i>
@@ -68,30 +68,25 @@
 
           <button 
             @click="trackReport"
-            class="px-8 py-3 border-2 border-white/30 rounded-lg text-white font-medium hover:bg-white/10 transition-all duration-300"
+            class="px-6 py-2 sm:px-8 sm:py-3 border-2 border-white/30 rounded-lg text-white font-medium hover:bg-white/10 transition-all duration-300"
           >
             <i class="fas fa-search mr-2"></i>
             Lacak Laporan
           </button>
         </div>
 
-        <!-- Statistics -->
-        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in-delay-3">
-          <div v-for="stat in statistics" :key="stat.label" class="text-center">
-            <div class="text-2xl font-bold text-white mb-1">{{ stat.value }}</div>
-            <div class="text-sm text-gray-400">{{ stat.label }}</div>
-          </div>
-        </div>
+    <!-- Statistics -->
+    <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in-delay-3">
+      <div v-for="stat in statistics" :key="stat.label" class="text-center">
+        <div class="text-2xl font-bold text-white mb-1">{{ stat.value }}</div>
+        <div class="text-sm text-gray-400">{{ stat.label }}</div>
       </div>
-
-      <!-- Scroll Indicator -->
-      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
-        <span class="text-white/60 text-sm mb-2">Scroll untuk melihat lebih</span>
-        <i class="fas fa-chevron-down text-white/60"></i>
+    </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import bannerImage from '../assets/images/banner.jpg';

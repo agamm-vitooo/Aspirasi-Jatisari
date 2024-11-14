@@ -6,25 +6,27 @@
     }"
     class="relative min-h-screen bg-gradient-to-b from-indigo-600 to-indigo-900 text-white transition-all duration-300 ease-in-out shadow-xl"
   >
-    <!-- Top Section -->
-    <div class="flex items-center justify-between p-4 border-b border-indigo-500/30">
-      <div class="flex items-center space-x-3">
-        <img
-          v-if="isOpen"
-          src="https://via.placeholder.com/32"
-          alt="Logo"
-          class="w-8 h-8"
-        />
-        <span v-if="isOpen" class="font-bold text-lg">Dashboard</span>
-      </div>
-      <button 
-        @click="toggleSidebar"
-        class="p-2 rounded-lg hover:bg-indigo-500/20 transition-colors"
-      >
-        <i v-if="isOpen" class="fas fa-chevron-left text-xl"></i>
-        <i v-else class="fas fa-bars text-xl"></i>
-      </button>
-    </div>
+<!-- Top Section -->
+<div class="flex items-center justify-between p-4 border-b border-indigo-500/30">
+  <div class="flex items-center space-x-3">
+    <img
+      v-if="isOpen"
+      src="https://via.placeholder.com/32"
+      alt="Logo"
+      class="w-8 h-8"
+    />
+    <span v-if="isOpen" class="font-bold text-lg whitespace-nowrap truncate">
+      Dashboard
+    </span>
+  </div>
+  <button 
+    @click="toggleSidebar"
+    class="p-2 rounded-lg hover:bg-indigo-500/20 transition-colors"
+  >
+    <i v-if="isOpen" class="fas fa-chevron-left text-xl"></i>
+    <i v-else class="fas fa-bars text-xl"></i>
+  </button>
+</div>
 
     <!-- Profile Section -->
     <div class="mt-6 px-4">
@@ -38,8 +40,7 @@
           <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
         </div>
         <div v-if="isOpen" class="flex-1">
-          <h3 class="font-semibold">John Doe</h3>
-          <p class="text-xs text-indigo-200">Administrator</p>
+          <h3 class="font-semibold">{{ user ? user.name : 'Loading...' }}</h3>
         </div>
       </div>
     </div>
@@ -102,6 +103,7 @@ export default {
     return {
       isOpen: true,
       activeItem: 'home',
+      user: null,
       menuItems: [
         { 
           id: 'home',
@@ -116,6 +118,18 @@ export default {
           link: '/laporan'
         },
         {
+          id: 'about',
+          icon: 'fas fa-file-alt',
+          label: 'About',
+          link: '/about'
+        },
+        {
+          id: 'blog',
+          icon: 'fas fa-file-alt',
+          label: 'Blog',
+          link: '/blog'
+        },
+        {
           id: 'profile',
           icon: 'fas fa-user',
           label: 'Profil',
@@ -124,6 +138,9 @@ export default {
       ]
     }
   },
+  created() {
+    this.fetchUserData();
+  },
   methods: {
     toggleSidebar() {
       this.isOpen = !this.isOpen;
@@ -131,9 +148,18 @@ export default {
     logout() {
       localStorage.removeItem('token');
       this.$router.push('/login');
+    },
+    async fetchUserData() {
+      const email = 'agamvito7@gmail.com'; // Ganti dengan email yang sesuai atau dari token
+      try {
+        const response = await axios.get(`/user/${email}`);
+        this.user = response.data;
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
     }
   }
-}
+};
 </script>
 
 <style scoped>
