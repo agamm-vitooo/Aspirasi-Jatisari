@@ -3,37 +3,26 @@ import index from '../pages/auth/index.vue';
 import Dashboard from '../pages/Dashboard.vue';
 import Login from '../pages/auth/LoginPages.vue';
 
-const routes = [{
-        path: '/',
-        name: 'index',
-        component: index
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        component: Login
-    },
-    {
-        path: '/dashboard',
-        name: 'Dashboard',
-        component: Dashboard,
-        meta: { requiresAuth: true } // Route that requires authentication
-    }
+const routes = [
+    { path: '/', name: 'index', component: index },
+    { path: '/login', name: 'Login', component: Login },
+    { path: '/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({
-    history: createWebHistory(
-        import.meta.env.VITE_BASE_URL), // For Vite projects
+    history: createWebHistory(),
     routes
 });
 
-// Check authentication before accessing protected pages
+// Middleware untuk cek autentikasi
 router.beforeEach((to, from, next) => {
-    const isLoggedIn = !!localStorage.getItem('token'); // Check if token exists
+    const isLoggedIn = !!localStorage.getItem('token'); // Token harus ada di localStorage
+    console.log('Auth Check:', isLoggedIn, 'Target Route:', to.path); // Log untuk cek token dan rute
+
     if (to.matched.some(record => record.meta.requiresAuth) && !isLoggedIn) {
-        next('/login'); // Redirect to login if not authenticated
+        next('/login'); // Jika belum login, arahkan ke halaman login
     } else {
-        next(); // Proceed if authenticated or route does not require authentication
+        next(); // Jika sudah login atau rute tidak membutuhkan autentikasi, lanjutkan
     }
 });
 

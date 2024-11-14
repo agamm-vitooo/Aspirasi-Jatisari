@@ -1,16 +1,16 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
-    <Home />
+    <index/>
   </div>
 </template>
 
 <script>
-import Home from './pages/auth/index.vue';
+import index from './pages/auth/index.vue';
 
 export default {
   components: {
-    Home
+    index
   }
 };
 </script>
