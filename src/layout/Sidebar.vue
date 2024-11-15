@@ -40,7 +40,7 @@
           <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
         </div>
         <div v-if="isOpen" class="flex-1">
-          <h3 class="font-semibold">{{ user ? user.name : 'Loading...' }}</h3>
+          <h3 class="font-semibold text-white">{{ user.name }}</h3>
         </div>
       </div>
     </div>
@@ -97,13 +97,14 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'Sidebar',
   data() {
     return {
       isOpen: true,
       activeItem: 'home',
-      user: null,
+      user: {name : '' },
       menuItems: [
         { 
           id: 'home',
@@ -150,12 +151,22 @@ export default {
       this.$router.push('/login');
     },
     async fetchUserData() {
-      const email = 'agamvito7@gmail.com'; // Ganti dengan email yang sesuai atau dari token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
       try {
-        const response = await axios.get(`/user/${email}`);
-        this.user = response.data;
+        const response = await axios.get('/api/user', {  // Sesuaikan endpoint jika perlu
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        this.user = response.data;  // Simpan hasil respons API ke `user`
       } catch (error) {
         console.error('Error fetching user data:', error);
+        this.user = { name: 'Unknown' }; // Gunakan data default jika gagal
       }
     }
   }
