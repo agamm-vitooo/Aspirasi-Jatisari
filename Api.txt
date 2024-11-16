@@ -1,0 +1,319 @@
+Berikut adalah **Dokumentasi API Lengkap** untuk Website Pengaduan dan Aspirasi Desa Jatisari, termasuk fitur **CRUD Profil** dan endpoint lainnya.
+
+---
+
+# **API Documentation: Pengaduan dan Aspirasi Desa Jatisari**
+
+## **Base URL**
+```
+https://api.desa-jatisari.com
+```
+
+---
+
+## **Authentication**
+
+### **1. Login**
+- **URL**: `/api/users/login`
+- **Method**: `POST`
+- **Description**: Login untuk mendapatkan token autentikasi.
+- **Request Body**:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "yourpassword"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "Login successful",
+    "token": "your-access-token"
+  }
+  ```
+
+### **2. Register**
+- **URL**: `/api/users/register`
+- **Method**: `POST`
+- **Description**: Mendaftarkan pengguna baru.
+- **Request Body**:
+  ```json
+  {
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "password": "securepassword"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "User registered successfully",
+    "data": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@example.com"
+    }
+  }
+  ```
+
+---
+
+## **Endpoints**
+
+### **1. Manage Profile**
+
+#### **1.1 Lihat Profil**
+- **URL**: `/api/profile`
+- **Method**: `GET`
+- **Description**: Mendapatkan informasi profil pengguna.
+- **Request Header**:
+  ```
+  Authorization: Bearer <your-token>
+  ```
+- **Response**:
+  ```json
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "phone": "081234567890",
+    "address": "RT 02, RW 01, Desa Jatisari",
+    "photo_url": "https://api.desa-jatisari.com/uploads/photo.jpg",
+    "created_at": "2024-11-16T09:00:00Z"
+  }
+  ```
+
+#### **1.2 Update Profil**
+- **URL**: `/api/profile`
+- **Method**: `PUT`
+- **Description**: Memperbarui informasi profil pengguna.
+- **Request Body**:
+  ```json
+  {
+    "name": "John Doe Updated",
+    "phone": "081234567891",
+    "address": "RT 02, RW 03, Desa Jatisari"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "Profile updated successfully",
+    "data": {
+      "id": 1,
+      "name": "John Doe Updated",
+      "phone": "081234567891",
+      "address": "RT 02, RW 03, Desa Jatisari"
+    }
+  }
+  ```
+
+#### **1.3 Hapus Profil**
+- **URL**: `/api/profile`
+- **Method**: `DELETE`
+- **Description**: Menghapus akun pengguna.
+- **Response**:
+  ```json
+  {
+    "message": "Profile deleted successfully"
+  }
+  ```
+
+#### **1.4 Upload Foto Profil**
+- **URL**: `/api/profile/photo`
+- **Method**: `POST`
+- **Description**: Mengunggah foto profil pengguna.
+- **Request Header**:
+  ```
+  Authorization: Bearer <your-token>
+  ```
+- **Request Body**:
+  - **Content-Type**: `multipart/form-data`
+  - **Form Data**:
+    - `photo`: file (PNG, JPG, JPEG)
+- **Response**:
+  ```json
+  {
+    "message": "Profile photo uploaded successfully",
+    "data": {
+      "photo_url": "https://api.desa-jatisari.com/uploads/profile_photo.jpg"
+    }
+  }
+  ```
+
+#### **1.5 Ganti Password**
+- **URL**: `/api/profile/password`
+- **Method**: `PUT`
+- **Description**: Mengubah password pengguna.
+- **Request Body**:
+  ```json
+  {
+    "old_password": "oldpassword",
+    "new_password": "newpassword"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "Password updated successfully"
+  }
+  ```
+
+---
+
+### **2. Pengaduan**
+
+#### **2.1 Tambah Pengaduan**
+- **URL**: `/api/pengaduan`
+- **Method**: `POST`
+- **Description**: Menambahkan pengaduan baru.
+- **Request Body**:
+  ```json
+  {
+    "title": "Jalan Rusak",
+    "description": "Jalan utama rusak parah.",
+    "category": "Infrastruktur",
+    "image_url": "https://example.com/photo.jpg"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "Pengaduan created successfully",
+    "data": {
+      "id": 1,
+      "title": "Jalan Rusak",
+      "status": "Pending",
+      "created_at": "2024-11-16T09:30:00Z"
+    }
+  }
+  ```
+
+#### **2.2 Lihat Semua Pengaduan**
+- **URL**: `/api/pengaduan`
+- **Method**: `GET`
+- **Description**: Mendapatkan semua pengaduan.
+- **Response**:
+  ```json
+  [
+    {
+      "id": 1,
+      "title": "Jalan Rusak",
+      "description": "Jalan utama rusak parah.",
+      "status": "Pending"
+    }
+  ]
+  ```
+
+#### **2.3 Update Pengaduan**
+- **URL**: `/api/pengaduan/{id}`
+- **Method**: `PATCH`
+- **Description**: Memperbarui status pengaduan.
+- **Request Body**:
+  ```json
+  {
+    "status": "Resolved"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "Pengaduan status updated successfully",
+    "data": {
+      "id": 1,
+      "status": "Resolved"
+    }
+  }
+  ```
+
+#### **2.4 Hapus Pengaduan**
+- **URL**: `/api/pengaduan/{id}`
+- **Method**: `DELETE`
+- **Description**: Menghapus pengaduan.
+- **Response**:
+  ```json
+  {
+    "message": "Pengaduan deleted successfully"
+  }
+  ```
+
+---
+
+### **3. Aspirasi**
+
+#### **3.1 Kirim Aspirasi**
+- **URL**: `/api/aspirasi`
+- **Method**: `POST`
+- **Description**: Menambahkan aspirasi baru.
+- **Request Body**:
+  ```json
+  {
+    "title": "Pengadaan Lampu Jalan",
+    "description": "Mohon pengadaan lampu jalan di RT 01."
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "message": "Aspirasi submitted successfully",
+    "data": {
+      "id": 1,
+      "title": "Pengadaan Lampu Jalan"
+    }
+  }
+  ```
+
+#### **3.2 Lihat Aspirasi**
+- **URL**: `/api/aspirasi`
+- **Method**: `GET`
+- **Description**: Melihat semua aspirasi.
+- **Response**:
+  ```json
+  [
+    {
+      "id": 1,
+      "title": "Pengadaan Lampu Jalan",
+      "description": "Mohon pengadaan lampu jalan di RT 01."
+    }
+  ]
+  ```
+
+---
+
+### **4. Statistik**
+#### **4.1 Statistik Pengaduan**
+- **URL**: `/api/statistik/pengaduan`
+- **Method**: `GET`
+- **Response**:
+  ```json
+  {
+    "pending": 5,
+    "resolved": 20,
+    "total": 25
+  }
+  ```
+
+---
+
+### **Error Handling**
+
+- **400 Bad Request**:
+  ```json
+  { "error": "Invalid input data" }
+  ```
+- **401 Unauthorized**:
+  ```json
+  { "error": "Unauthorized" }
+  ```
+- **404 Not Found**:
+  ```json
+  { "error": "Resource not found" }
+  ```
+- **500 Internal Server Error**:
+  ```json
+  { "error": "Something went wrong" }
+  ```
+
+---
+
+Dokumentasi ini lengkap untuk mengelola seluruh fitur di **Website Pengaduan dan Aspirasi Desa Jatisari**.
