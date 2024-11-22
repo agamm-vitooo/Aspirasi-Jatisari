@@ -1,319 +1,248 @@
-Berikut adalah **Dokumentasi API Lengkap** untuk Website Pengaduan dan Aspirasi Desa Jatisari, termasuk fitur **CRUD Profil** dan endpoint lainnya.
+Untuk menguji API menggunakan **Postman**, berikut adalah langkah-langkah pengaturan untuk setiap endpoint CRUD pada **User Management** dan **Blog Management**:
 
 ---
 
-# **API Documentation: Pengaduan dan Aspirasi Desa Jatisari**
+### **1. Setup Environment di Postman**
+1. **Buat Environment Baru**:
+   - Klik tombol **Environments** di pojok kanan atas Postman.
+   - Klik **Add** untuk menambahkan environment baru.
+   - Tambahkan variabel berikut:
+     - **`API_URL`**: `http://localhost:5000/api`
+     - **`userId`**: Kosong (akan diisi setelah registrasi atau login)
+     - **`blogId`**: Kosong (akan diisi setelah membuat blog)
 
-## **Base URL**
-```
-https://api.desa-jatisari.com
-```
+2. Klik **Save** untuk menyimpan environment.
 
 ---
 
-## **Authentication**
+### **2. Pengaturan Endpoint CRUD**
 
-### **1. Login**
-- **URL**: `/api/users/login`
+#### **User Management**
+**A. Register User**
 - **Method**: `POST`
-- **Description**: Login untuk mendapatkan token autentikasi.
-- **Request Body**:
+- **URL**: `{{API_URL}}/register`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Body** (JSON):  
   ```json
   {
-    "email": "user@example.com",
-    "password": "yourpassword"
+      "username": "johndoe",
+      "email": "johndoe@example.com",
+      "password": "password123"
   }
   ```
-- **Response**:
+- **Expected Response**:  
   ```json
   {
-    "message": "Login successful",
-    "token": "your-access-token"
+      "message": "User registered successfully",
+      "user": {
+          "_id": "64a8e37dfc13ae423e00001a",
+          "username": "johndoe",
+          "email": "johndoe@example.com"
+      }
   }
   ```
+- **Save the `_id`** ke variable `userId`.
 
-### **2. Register**
-- **URL**: `/api/users/register`
+---
+
+**B. Login User**
 - **Method**: `POST`
-- **Description**: Mendaftarkan pengguna baru.
-- **Request Body**:
+- **URL**: `{{API_URL}}/login`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Body** (JSON):  
   ```json
   {
-    "name": "John Doe",
-    "email": "johndoe@example.com",
-    "password": "securepassword"
+      "email": "johndoe@example.com",
+      "password": "password123"
   }
   ```
-- **Response**:
+- **Expected Response**:  
   ```json
   {
-    "message": "User registered successfully",
-    "data": {
-      "id": 1,
-      "name": "John Doe",
-      "email": "johndoe@example.com"
-    }
+      "message": "Login successful",
+      "token": "your-auth-token"
   }
   ```
 
 ---
 
-## **Endpoints**
-
-### **1. Manage Profile**
-
-#### **1.1 Lihat Profil**
-- **URL**: `/api/profile`
+**C. Get User Profile**
 - **Method**: `GET`
-- **Description**: Mendapatkan informasi profil pengguna.
-- **Request Header**:
-  ```
-  Authorization: Bearer <your-token>
-  ```
-- **Response**:
+- **URL**: `{{API_URL}}/profile/{{userId}}`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Expected Response**:  
   ```json
   {
-    "id": 1,
-    "name": "John Doe",
-    "email": "johndoe@example.com",
-    "phone": "081234567890",
-    "address": "RT 02, RW 01, Desa Jatisari",
-    "photo_url": "https://api.desa-jatisari.com/uploads/photo.jpg",
-    "created_at": "2024-11-16T09:00:00Z"
+      "username": "johndoe",
+      "email": "johndoe@example.com",
+      "profile": {
+          "bio": "Developer",
+          "age": 25
+      }
   }
   ```
 
-#### **1.2 Update Profil**
-- **URL**: `/api/profile`
+---
+
+**D. Update User Profile**
 - **Method**: `PUT`
-- **Description**: Memperbarui informasi profil pengguna.
-- **Request Body**:
+- **URL**: `{{API_URL}}/profile/{{userId}}`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Body** (JSON):  
   ```json
   {
-    "name": "John Doe Updated",
-    "phone": "081234567891",
-    "address": "RT 02, RW 03, Desa Jatisari"
+      "bio": "Updated Developer",
+      "age": 26
   }
   ```
-- **Response**:
+- **Expected Response**:  
   ```json
   {
-    "message": "Profile updated successfully",
-    "data": {
-      "id": 1,
-      "name": "John Doe Updated",
-      "phone": "081234567891",
-      "address": "RT 02, RW 03, Desa Jatisari"
-    }
+      "message": "Profile updated successfully",
+      "profile": {
+          "bio": "Updated Developer",
+          "age": 26
+      }
   }
   ```
 
-#### **1.3 Hapus Profil**
-- **URL**: `/api/profile`
+---
+
+**E. Delete User Profile**
 - **Method**: `DELETE`
-- **Description**: Menghapus akun pengguna.
-- **Response**:
+- **URL**: `{{API_URL}}/profile/{{userId}}`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Expected Response**:  
   ```json
   {
-    "message": "Profile deleted successfully"
-  }
-  ```
-
-#### **1.4 Upload Foto Profil**
-- **URL**: `/api/profile/photo`
-- **Method**: `POST`
-- **Description**: Mengunggah foto profil pengguna.
-- **Request Header**:
-  ```
-  Authorization: Bearer <your-token>
-  ```
-- **Request Body**:
-  - **Content-Type**: `multipart/form-data`
-  - **Form Data**:
-    - `photo`: file (PNG, JPG, JPEG)
-- **Response**:
-  ```json
-  {
-    "message": "Profile photo uploaded successfully",
-    "data": {
-      "photo_url": "https://api.desa-jatisari.com/uploads/profile_photo.jpg"
-    }
-  }
-  ```
-
-#### **1.5 Ganti Password**
-- **URL**: `/api/profile/password`
-- **Method**: `PUT`
-- **Description**: Mengubah password pengguna.
-- **Request Body**:
-  ```json
-  {
-    "old_password": "oldpassword",
-    "new_password": "newpassword"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "message": "Password updated successfully"
+      "message": "Profile deleted successfully"
   }
   ```
 
 ---
 
-### **2. Pengaduan**
-
-#### **2.1 Tambah Pengaduan**
-- **URL**: `/api/pengaduan`
+#### **Blog Management**
+**A. Create Blog**
 - **Method**: `POST`
-- **Description**: Menambahkan pengaduan baru.
-- **Request Body**:
+- **URL**: `{{API_URL}}/blogs`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Body** (JSON):  
   ```json
   {
-    "title": "Jalan Rusak",
-    "description": "Jalan utama rusak parah.",
-    "category": "Infrastruktur",
-    "image_url": "https://example.com/photo.jpg"
+      "title": "My First Blog",
+      "content": "This is the content of my first blog.",
+      "author": "John Doe",
+      "tags": ["tech", "javascript"],
+      "published": true
   }
   ```
-- **Response**:
+- **Expected Response**:  
   ```json
   {
-    "message": "Pengaduan created successfully",
-    "data": {
-      "id": 1,
-      "title": "Jalan Rusak",
-      "status": "Pending",
-      "created_at": "2024-11-16T09:30:00Z"
-    }
+      "message": "Blog created successfully",
+      "blog": {
+          "_id": "64a8e48efc13ae423e00002b",
+          "title": "My First Blog",
+          "content": "This is the content of my first blog.",
+          "author": "John Doe"
+      }
   }
   ```
+- **Save the `_id`** ke variable `blogId`.
 
-#### **2.2 Lihat Semua Pengaduan**
-- **URL**: `/api/pengaduan`
+---
+
+**B. Get All Blogs**
 - **Method**: `GET`
-- **Description**: Mendapatkan semua pengaduan.
-- **Response**:
+- **URL**: `{{API_URL}}/blogs`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Expected Response**:  
   ```json
   [
-    {
-      "id": 1,
-      "title": "Jalan Rusak",
-      "description": "Jalan utama rusak parah.",
-      "status": "Pending"
-    }
-  ]
-  ```
-
-#### **2.3 Update Pengaduan**
-- **URL**: `/api/pengaduan/{id}`
-- **Method**: `PATCH`
-- **Description**: Memperbarui status pengaduan.
-- **Request Body**:
-  ```json
-  {
-    "status": "Resolved"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "message": "Pengaduan status updated successfully",
-    "data": {
-      "id": 1,
-      "status": "Resolved"
-    }
-  }
-  ```
-
-#### **2.4 Hapus Pengaduan**
-- **URL**: `/api/pengaduan/{id}`
-- **Method**: `DELETE`
-- **Description**: Menghapus pengaduan.
-- **Response**:
-  ```json
-  {
-    "message": "Pengaduan deleted successfully"
-  }
-  ```
-
----
-
-### **3. Aspirasi**
-
-#### **3.1 Kirim Aspirasi**
-- **URL**: `/api/aspirasi`
-- **Method**: `POST`
-- **Description**: Menambahkan aspirasi baru.
-- **Request Body**:
-  ```json
-  {
-    "title": "Pengadaan Lampu Jalan",
-    "description": "Mohon pengadaan lampu jalan di RT 01."
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "message": "Aspirasi submitted successfully",
-    "data": {
-      "id": 1,
-      "title": "Pengadaan Lampu Jalan"
-    }
-  }
-  ```
-
-#### **3.2 Lihat Aspirasi**
-- **URL**: `/api/aspirasi`
-- **Method**: `GET`
-- **Description**: Melihat semua aspirasi.
-- **Response**:
-  ```json
-  [
-    {
-      "id": 1,
-      "title": "Pengadaan Lampu Jalan",
-      "description": "Mohon pengadaan lampu jalan di RT 01."
-    }
+      {
+          "_id": "64a8e48efc13ae423e00002b",
+          "title": "My First Blog",
+          "content": "This is the content of my first blog.",
+          "author": "John Doe"
+      }
   ]
   ```
 
 ---
 
-### **4. Statistik**
-#### **4.1 Statistik Pengaduan**
-- **URL**: `/api/statistik/pengaduan`
+**C. Get Blog by ID**
 - **Method**: `GET`
-- **Response**:
+- **URL**: `{{API_URL}}/blogs/{{blogId}}`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Expected Response**:  
   ```json
   {
-    "pending": 5,
-    "resolved": 20,
-    "total": 25
+      "_id": "64a8e48efc13ae423e00002b",
+      "title": "My First Blog",
+      "content": "This is the content of my first blog.",
+      "author": "John Doe"
   }
   ```
 
 ---
 
-### **Error Handling**
-
-- **400 Bad Request**:
+**D. Update Blog**
+- **Method**: `PUT`
+- **URL**: `{{API_URL}}/blogs/{{blogId}}`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Body** (JSON):  
   ```json
-  { "error": "Invalid input data" }
+  {
+      "title": "Updated Blog Title",
+      "content": "Updated blog content.",
+      "tags": ["updated", "blog"],
+      "published": false
+  }
   ```
-- **401 Unauthorized**:
+- **Expected Response**:  
   ```json
-  { "error": "Unauthorized" }
-  ```
-- **404 Not Found**:
-  ```json
-  { "error": "Resource not found" }
-  ```
-- **500 Internal Server Error**:
-  ```json
-  { "error": "Something went wrong" }
+  {
+      "message": "Blog updated successfully",
+      "blog": {
+          "_id": "64a8e48efc13ae423e00002b",
+          "title": "Updated Blog Title",
+          "content": "Updated blog content."
+      }
+  }
   ```
 
 ---
 
-Dokumentasi ini lengkap untuk mengelola seluruh fitur di **Website Pengaduan dan Aspirasi Desa Jatisari**.
+**E. Delete Blog**
+- **Method**: `DELETE`
+- **URL**: `{{API_URL}}/blogs/{{blogId}}`
+- **Headers**:  
+  - `Content-Type`: `application/json`
+- **Expected Response**:  
+  ```json
+  {
+      "message": "Blog deleted successfully"
+  }
+  ```
+
+---
+
+### **Catatan**
+- Pastikan server (`http://localhost:5000`) berjalan sebelum melakukan tes di Postman.
+- Simpan variable `userId` dan `blogId` di environment setelah berhasil melakukan operasi create.
+- Gunakan tab **Tests** di Postman untuk otomatis menyimpan variabel:
+```javascript
+pm.environment.set("userId", pm.response.json().user._id);
+pm.environment.set("blogId", pm.response.json().blog._id);
+``` 
+
+Dengan langkah ini, Anda bisa mengelola API dengan mudah di Postman! 🚀

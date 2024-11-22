@@ -158,7 +158,7 @@ export default {
       }
 
       try {
-        const response = await axios.get('/api/user', {  // Sesuaikan endpoint jika perlu
+        const response = await axios.get('/api/profiles', {  // Sesuaikan endpoint jika perlu
           headers: {
             Authorization: `Bearer ${token}`
           }

@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const { register, login } = require('./controller/authController');
+const profileRoutes = require('./routes/profileRoutes');
+const blogRoutes = require('./routes/blogRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -10,19 +12,26 @@ dotenv.config();
 // Connect to the database
 connectDB();
 
-// Initialize Express app
 const app = express();
 
-app.post('/api/register', register); // Rute untuk registrasi
-app.post('/api/login', login); // Rute untuk login
-
 // Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(express.json()); // Parse incoming JSON requests
+app.use(cors()); // Enable CORS for cross-origin requests
+app.use(express.json()); // Parse JSON request bodies
 
-// Main route (root path)
-app.get('/', (req, res) => {
-    res.send('Server is running');
+// Routes
+app.post('/api/register', register);
+app.post('/api/login', login);
+app.use('/api/profile', profileRoutes);
+app.use('/api/blogs', blogRoutes);
+
+// Root route
+app.get('/', (_, res) => { // Replace `req` with `_` to indicate it is unused
+    res.send('Server berjalan');
+});
+
+// Handle 404 errors
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
 });
 
 // Start the server
